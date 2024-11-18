@@ -10,11 +10,11 @@ class Column(object):
 class CDate(Column):
 
     def __init__(self, origin, target, fmt):
-        super(Column).__init__(origin, target)
+        super().__init__(origin, target)
         self._format = fmt
 
     def preprocess(self, df):
-        df[self._target] = pd.to_datetime(
+        df[self._origin] = pd.to_datetime(
             df[self._origin],
             format=self._format
         )
@@ -23,11 +23,11 @@ class CDate(Column):
 
 class CFloat(Column):
     def __init__(self, origin, target, precision=3):
-        super(Column).__init__(origin, target)
+        super().__init__(origin, target)
         self._precision = precision
 
     def preprocess(self, df):
-        df[self._target] = pd.to_numeric(
+        df[self._origin] = pd.to_numeric(
             df[self._origin]
         ).round(self._precision)
         return df
@@ -42,8 +42,12 @@ class CString(Column):
 
 
 class CUnmapped(Column):
+    def __init__(self, origin):
+        super().__init__(origin, origin)
+    
     def preprocess(self, df):
-        df = df.drop(columns=[self._origin])
+
+        df = df.drop(columns=self._origin)
         return df
 
 
