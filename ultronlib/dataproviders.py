@@ -3,11 +3,13 @@ import pandas as pd
 
 class DataProvider(object):
 
-    def __init__(self, datasource):
+    def __init__(self, datasource,date_column='date'):
         self._datasource = datasource
+        self._date_column = date_column
         self.apply_map()
 
     def apply_map(self):
+        self.df = self.df.sort_values(by=self._date_column)
         self.cast_columns()
         columns_map = {column._origin: column._target for column in self._datasource.mapper}
         self.df = self.df.rename(
